@@ -1,8 +1,11 @@
 import { shadow } from '@/style/utils'
 import Link from 'next/link'
 import React from 'react'
+import LogoutButton from './logoutButton';
+import { Button } from './ui/button';
 
 function Header() {
+  const user = "Dhruv Arne";
   return (
 <header className='relative flex h-24 w-full items-center justify-between bg-popover-500 px-3 sm:px-8'
 style={{boxShadow: shadow}}
@@ -11,7 +14,28 @@ style={{boxShadow: shadow}}
 <h1 className='flex flex-col pb-1 text-2xl font-semibold leading-6'>NeuroLife<span className='text-xs'>Made By CWD</span></h1>
 </Link>
 
+<div className = 'flex gap-4'>
 
+  {user ?
+   (<LogoutButton/>)
+    : (
+<>
+<Button asChild>
+  <Link href="/sign-up" className='hidden sm:block'>
+  SignUp
+  </Link>
+</Button>
+
+<Button asChild>
+  <Link href="/login" className='outline'>
+  Login
+  </Link>
+</Button>
+</>
+
+  )}
+
+</div>
 </header>
   )
 }
