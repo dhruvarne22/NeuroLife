@@ -1,10 +1,7 @@
 import React from 'react'
 import type { Metadata } from "next";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+
 import AuthForm from '@/components/authForm';
 
 
