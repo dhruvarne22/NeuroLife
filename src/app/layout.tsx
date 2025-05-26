@@ -3,6 +3,7 @@ import '@/style/global.css'
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import Header from "@/components/Header";
+import { ThemeProvider } from "@/components/providers/themeProvider";
 
 
 export const metadata: Metadata = {
@@ -18,10 +19,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
        
       >
+
+        <ThemeProvider
+        attribute="class"
+        defaultTheme="dark"
+  enableSystem
+        disableTransitionOnChange
+
+      
+        >
 
          <SidebarProvider>
           <AppSidebar />.
@@ -34,6 +44,7 @@ export default function RootLayout({
           </main>
 </div>
         </SidebarProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

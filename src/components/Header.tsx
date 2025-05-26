@@ -3,6 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 import LogoutButton from './logoutButton';
 import { Button } from './ui/button';
+import { DarkModeToggle } from './darkModeToggle';
 
 function Header() {
   const user = "Dhruv Arne";
@@ -34,6 +35,9 @@ style={{boxShadow: shadow}}
 </>
 
   )}
+
+
+  <DarkModeToggle/>
 
 </div>
 </header>

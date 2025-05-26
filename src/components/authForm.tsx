@@ -1,10 +1,12 @@
-
+"use client"
 import  Link  from 'next/link'
-import React from 'react'
+import React, { startTransition } from 'react'
 import { Button } from './ui/button'
 import { CardContent, CardFooter } from './ui/card'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
+import { signUpAction } from '@/action/user'
+import { error } from 'console'
 
 
 type Props ={
@@ -14,7 +16,36 @@ type Props ={
 function AuthForm({type} : Props) {
 const isLoginForm = type === "login";
 
-  return <form className='flex flex-col gap-4'>
+
+const handleSubmit =  async (formData : FormData)=>{
+
+
+
+const email = formData.get('email') as string;
+const password = formData.get('password') as string;
+
+let errorMessage;
+
+if(isLoginForm){
+
+}else{
+  errorMessage = (await signUpAction(email, password)).errorMessage;
+}
+
+
+if(!errorMessage){
+  console.log("Success SignUp");
+  
+}else{
+  console.log(errorMessage);
+}
+
+
+
+
+}
+
+  return <form className='flex flex-col gap-4' action={handleSubmit}>
 
           <CardContent className='grid w-full items-center gap-4'>
 
