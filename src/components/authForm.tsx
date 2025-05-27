@@ -1,12 +1,12 @@
 "use client"
 import  Link  from 'next/link'
-import React, { startTransition } from 'react'
+import React from 'react'
 import { Button } from './ui/button'
 import { CardContent, CardFooter } from './ui/card'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { signUpAction } from '@/action/user'
-import { error } from 'console'
+
 import { loginAction } from '../action/user'
 
 
