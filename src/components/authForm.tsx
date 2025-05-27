@@ -7,6 +7,7 @@ import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { signUpAction } from '@/action/user'
 import { error } from 'console'
+import { loginAction } from '../action/user'
 
 
 type Props ={
@@ -27,6 +28,9 @@ const password = formData.get('password') as string;
 let errorMessage;
 
 if(isLoginForm){
+
+  errorMessage = (await loginAction(email, password)).errorMessage;
+
 
 }else{
   errorMessage = (await signUpAction(email, password)).errorMessage;
