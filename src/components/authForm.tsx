@@ -8,6 +8,7 @@ import { Label } from './ui/label'
 import { signUpAction } from '@/action/user'
 
 import { loginAction } from '../action/user'
+import { showErrorToast, showSuccessToast } from '@/lib/toast-utils'
 
 
 type Props ={
@@ -25,7 +26,7 @@ const handleSubmit =  async (formData : FormData)=>{
 const email = formData.get('email') as string;
 const password = formData.get('password') as string;
 
-let errorMessage;
+let  errorMessage = null;
 
 if(isLoginForm){
 
@@ -34,13 +35,28 @@ if(isLoginForm){
 
 }else{
   errorMessage = (await signUpAction(email, password)).errorMessage;
+
+
 }
 
-
+console.log("errorMessage23323424");
+console.log(errorMessage);
 if(!errorMessage){
+
+
+if(isLoginForm){
+
+  showSuccessToast("Logged in successfully");
+
+}else{
+ showSuccessToast("Plesae confirm your email");
+
+}
   console.log("Success SignUp");
   
 }else{
+
+  showErrorToast(errorMessage);
   console.log(errorMessage);
 }
 

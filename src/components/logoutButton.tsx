@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Button } from './ui/button';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { logOutAction } from '@/action/user';
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -14,8 +15,8 @@ const [loading, setLoading] = useState(false);
 
 const handleLogout= async () =>{
     setLoading(true);
-    await sleep(2000);
-    setLoading(false);
+   await logOutAction();
+setLoading(false);
     router.push("/login");
 }
 

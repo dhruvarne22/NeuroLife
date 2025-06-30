@@ -4,6 +4,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import Header from "@/components/Header";
 import { ThemeProvider } from "@/components/providers/themeProvider";
+import { Toaster } from "react-hot-toast";
 
 
 export const metadata: Metadata = {
@@ -41,6 +42,18 @@ export default function RootLayout({
   
           <main className="flex flex-1 flex-col px-4 pt-10  xl:px-8">
         {children}
+
+        <Toaster
+        position="bottom-right"
+        toastOptions={{
+          duration: 4000,
+          style : {
+            padding: '12px 16px',
+            borderRadius : '8px',
+            fontSize : '14px'
+          }
+        }}
+        />
           </main>
 </div>
         </SidebarProvider>

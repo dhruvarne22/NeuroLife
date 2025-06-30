@@ -1,8 +1,9 @@
+import InputNote from "@/components/InputNote";
 
 export default function Home() {
   return (
  <div>
-  Home Page
+<InputNote noteId={""} startingNoteText={""}/>
  </div>
   );
 }
