@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import '@/style/global.css'
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
+import AppSideBar from "@/components/MyAppSidebar";
 import Header from "@/components/Header";
 import { ThemeProvider } from "@/components/providers/themeProvider";
 import { Toaster } from "react-hot-toast";
-
+import NoteProvider from "@/components/providers/NoteProvider";
 
 export const metadata: Metadata = {
   title: {default: "NeuroLife - AI Daily Journal", template : "%s | NeuroLife"} ,
@@ -33,9 +33,9 @@ export default function RootLayout({
 
       
         >
-
+<NoteProvider>
          <SidebarProvider>
-          <AppSidebar />.
+          <AppSideBar />
 <div  className="flex min-h-screen w-full flex-col">
 
           <Header/>
@@ -57,6 +57,7 @@ export default function RootLayout({
           </main>
 </div>
         </SidebarProvider>
+        </NoteProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -1,9 +1,31 @@
+import { getUser } from "@/auth/server";
+import CreateNewNote from "@/components/CreateNewNote";
 import InputNote from "@/components/InputNote";
+import { prisma } from "@/db/prisma";
 
-export default function Home() {
+
+type Props = {
+  searchParams : Promise<{[key:string] : string | string[] | undefined}>
+}
+
+export default async function Home({searchParams} : Props) {
+const noteIdparam = (await searchParams).noteid;
+const noteid = Array.isArray(noteIdparam) ? noteIdparam[0] : noteIdparam || "";
+console.log("noteid home");
+console.log(noteid);
+const user = await getUser();
+const note = await prisma.note.findUnique({
+  where : {id : noteid, authorId : user?.id}
+})
+
+
   return (
- <div>
-<InputNote noteId={""} startingNoteText={""}/>
+ <div className="flex h-full flex-col items-center gap-4">
+<div className="flex w-full max-w-4xl justify-end gap-2">
+<CreateNewNote user={user}/>
+</div>
+
+<InputNote noteId={noteid} startingNoteText={note?.text || ""}/>
  </div>
   );
 }

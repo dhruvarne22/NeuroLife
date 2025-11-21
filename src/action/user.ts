@@ -1,119 +1,89 @@
-"use server"
-import { createClient } from "@/auth/server"
+"use server";
+import { createClient } from "@/auth/server";
 import { prisma } from "@/db/prisma";
 import { handleError } from "@/lib/utils";
 
+// ------------------ SIGNUP ACTION ------------------
 export const signUpAction = async (email: string, password: string) => {
+  try {
+    const { auth } = await createClient();
 
+    // Check if email already exists in your custom `User` table
+    const tableUser = await prisma.user.findUnique({
+      where: { email },
+    });
 
-    try {
-
-        const { auth } = await createClient();
-const tableUser = await prisma.user.findFirst({
-    where : {
-        email : email
-    }
-});
-
-console.log("tableUser");
-console.log(tableUser);
-
-if(tableUser){
-    console.log("ERORORRO");
-    return {errorMessage  : "User already exists. Please login."}
-}
-
-
-        const { data, error } = await auth.signUp({
-            email, password
-        });
-
-
-        if (error) throw error;
-
-        const userid = data.user?.id;
-const user = data.user;
-        if (!userid) throw new Error("User ID not found after sign up");
-
-await prisma.user.create(
-    {
-    
-    data : {
-id : userid,
-email
-}
-
-}
-
-);
-
-
-
-
-
-
-        return { errorMessage: null };
-    } catch (error) {
-        console.log("error11111");
-        console.log(error);
-         return handleError(error);
+    if (tableUser) {
+      return { errorMessage: "User already exists. Please login." };
     }
 
-}
+    // Create user in Supabase Auth
+    const { data, error } = await auth.signUp({
+      email,
+      password,
+    });
 
+    if (error) throw error;
 
+    const userId = data.user?.id;
+    if (!userId) throw new Error("User ID not found after sign up");
+
+    // Mirror user into your custom `User` table using the same ID
+    await prisma.user.create({
+      data: {
+        id: userId, // Must match auth.users.id
+        email,
+      },
+    });
+
+    return { errorMessage: null };
+  } catch (error) {
+    console.error("Signup Error:", error);
+    return handleError(error);
+  }
+};
+
+// ------------------ LOGIN ACTION ------------------
 export const loginAction = async (email: string, password: string) => {
+  try {
+    const { auth } = await createClient();
 
-    try {
+    const { data, error } = await auth.signInWithPassword({
+      email,
+      password,
+    });
 
-        const { auth } = await createClient();
+    if (error) throw error;
 
-        const { data, error } = await auth.signInWithPassword({
-            email, password
-        });
+    const userId = data.user?.id;
+    if (!userId) throw new Error("User ID not found after login");
 
+    // Optional: Ensure the user exists in your custom User table
+    const userInTable = await prisma.user.findUnique({
+      where: { id: userId },
+    });
 
-        if (error) throw error;
-
-        const userid = data.user?.id;
-
-        if (!userid) throw new Error("User ID not found after login");
-
-
-
-const user = data.user;
-if(!user){
-    return {errorMessage : "User not found. Please sign up."}
-}
-
-
-
-        console.log("LOGGED IN SUCCESS");
-
-
-
-
-
-        return { errorMessage: null };
-    } catch (error) {
-        console.log(error);
-      return handleError(error);
+    if (!userInTable) {
+      return { errorMessage: "User account is corrupted. Please contact support." };
     }
-}
 
+    return { errorMessage: null };
+  } catch (error) {
+    console.error("Login Error:", error);
+    return handleError(error);
+  }
+};
 
+// ------------------ LOGOUT ACTION ------------------
 export const logOutAction = async () => {
+  try {
+    const { auth } = await createClient();
 
-    try {
-            const {auth} = await createClient();
+    const { error } = await auth.signOut();
+    if (error) throw error;
 
-    const {error} = await auth.signOut();
-
-    if(error) throw error;
-
-    return {errorMessage : null};
-    } catch (error) {
-        return {errorMessage : error};
-    }
-
-}
+    return { errorMessage: null };
+  } catch (error) {
+    return handleError(error);
+  }
+};
