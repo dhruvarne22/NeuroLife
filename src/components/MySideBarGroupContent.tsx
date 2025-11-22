@@ -7,6 +7,7 @@ import { Input } from './ui/input'
 import { Note } from '@prisma/client'
 import Link from 'next/link'
 import Fuse from "fuse.js";
+import NoteSelectBtn from './NoteSelectBtn'
 type Props = {
     notes: Note[];
 }
@@ -51,11 +52,7 @@ const filteredNotes = searchText ? fuse.search(searchText).map((result)=>result.
 
     {filteredNotes.map((note)=> (
   <SidebarMenuItem key={note.id} className='group/item'>
-    <SidebarMenuButton asChild className={`items-start gap-0 pr-12 bg-sidebar-accent/50`}>
-   <Link href={`/?noteId=${note.id}`} className='flex h-fit flex-col'>
-<p className='w-full overflow-hidden truncate text-ellipsis whitespace-nowrap'>{note.text}</p>
-   </Link>
-   </SidebarMenuButton>
+ <NoteSelectBtn note= {note} />
     </SidebarMenuItem>
     ))}
 

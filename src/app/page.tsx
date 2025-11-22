@@ -9,7 +9,7 @@ type Props = {
 }
 
 export default async function Home({searchParams} : Props) {
-const noteIdparam = (await searchParams).noteid;
+const noteIdparam = (await searchParams).noteId;
 const noteid = Array.isArray(noteIdparam) ? noteIdparam[0] : noteIdparam || "";
 console.log("noteid home");
 console.log(noteid);

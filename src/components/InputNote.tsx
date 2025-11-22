@@ -1,10 +1,11 @@
 'use client'
 
 
-import React, { ChangeEvent, useEffect } from 'react'
+import { ChangeEvent, useEffect } from 'react'
 import { Textarea } from './ui/textarea'
 import useNote from '@/hooks/use-note'
 import { updateNoteAction } from '@/action/note'
+import { useSearchParams } from 'next/navigation'
 
 type Props = {
     noteId : string,
@@ -16,8 +17,22 @@ let updateTimeout  : NodeJS.Timeout;
 
 const InputNote = ({noteId ,  startingNoteText} : Props) => {
 
-
+const noteIdParam = useSearchParams().get("noteId") || "";
     const {noteText , setNoteText} = useNote();
+console.log("HI THER");
+    useEffect(() => {
+    console.log("HI THER2");
+    console.log("noteIdParam");
+    console.log(noteIdParam);
+        console.log("noteI");
+    console.log(noteId);
+      if(noteIdParam === noteId){ 
+    console.log("HI THER3");
+        setNoteText(startingNoteText);
+      }
+      
+    }, [startingNoteText, noteIdParam, noteId, setNoteText])
+    
 
 
 const handleUpdateNote = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -41,4 +56,4 @@ console.log("UPDATING NOTE FROM DEBOUNCE");
   onChange={handleUpdateNote} placeholder='Type your notes here'/>
 }
 
-export default InputNote
+export default InputNote;

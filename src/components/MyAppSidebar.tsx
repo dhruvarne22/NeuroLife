@@ -24,7 +24,7 @@ if(user){
       <SidebarGroup>
         <SidebarGroupLabel className='mb-2 mt-2 text-lg'>
           Your Life x NeuroLife
-        </SidebarGroupLabel>
+        </SidebarGroupLabel> 
 
         <MySideBarGroupContent notes={notes}/>
         </SidebarGroup>
