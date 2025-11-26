@@ -5,9 +5,12 @@ import { SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } 
 import { SearchIcon } from 'lucide-react'
 import { Input } from './ui/input'
 import { Note } from '@prisma/client'
-import Link from 'next/link'
+
 import Fuse from "fuse.js";
 import NoteSelectBtn from './NoteSelectBtn'
+import DeleteNoteBtn from './DeleteNoteBtn'
+
+
 type Props = {
     notes: Note[];
 }
@@ -35,6 +38,10 @@ const fuse = useMemo(() => {
 
 const filteredNotes = searchText ? fuse.search(searchText).map((result)=>result.item) : localNotes;
 
+const localDelNote = (noteId : string) => {
+  setLocalnotes((prevNotes)=>prevNotes.filter((note) => note.id !== noteId));
+}
+
   return (
 <SidebarGroupContent>
 
@@ -53,6 +60,7 @@ const filteredNotes = searchText ? fuse.search(searchText).map((result)=>result.
     {filteredNotes.map((note)=> (
   <SidebarMenuItem key={note.id} className='group/item'>
  <NoteSelectBtn note= {note} />
+<DeleteNoteBtn noteId={note.id} localNoteDel={localDelNote}/>
     </SidebarMenuItem>
     ))}
 

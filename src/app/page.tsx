@@ -22,6 +22,7 @@ const note = await prisma.note.findUnique({
   return (
  <div className="flex h-full flex-col items-center gap-4">
 <div className="flex w-full max-w-4xl justify-end gap-2">
+  
 <CreateNewNote user={user}/>
 </div>
 

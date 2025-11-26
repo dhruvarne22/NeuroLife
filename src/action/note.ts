@@ -39,8 +39,7 @@ try {
     const user  = await getUser();
 
     if(!user) throw Error("Login to update Note");
-console.log("user.id");
-console.log(user.id);
+
     await prisma.note.create({
         
         data : {
@@ -65,7 +64,7 @@ console.log(user.id);
 
 
 
-export const deleteNoteAction = async (noteId: string) => {
+export const deleteNoteAction = async (noteId: string) => { 
   try {
     const user = await getUser();
     if (!user) throw new Error("You must be logged in to delete a note");
