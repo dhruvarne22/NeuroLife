@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Note" ADD COLUMN     "summary" TEXT,
+ADD COLUMN     "summaryUpdatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;

@@ -59,7 +59,7 @@ if(useGlobalNoteText){
     {noteText}
 </p>
 <p className='text-muted-foreground text-xs'>
-    {note.updatedAt.toLocaleDateString()}
+    {note.createdAt.toLocaleDateString()}
 </p>
 </Link>
 
