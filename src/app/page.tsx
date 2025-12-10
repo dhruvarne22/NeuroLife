@@ -17,7 +17,7 @@ const authUser = await getUser();
 const user = authUser
   ? {
       id: authUser.id,
-      name: authUser.name ?? null,  
+      name: "NeuroLife User",  
       email: authUser.email ?? "",
     }
   : null;
