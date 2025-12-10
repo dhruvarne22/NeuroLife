@@ -8,13 +8,11 @@ import { v4 as uuidv4 } from "uuid";
 export default async function Home({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams: Record<string, string | string[] | undefined>;
 }) {
   // 1. Authenticate user
   const authUser = await getUser();
-  if (!authUser) {
-    redirect("/login");
-  }
+  if (!authUser) redirect("/login");
 
   const user = {
     id: authUser.id,
@@ -22,22 +20,22 @@ export default async function Home({
     email: authUser.email ?? "",
   };
 
-  // 2. Extract noteId safely
+  // 2. Extract noteId
   const rawNoteId = searchParams?.noteId;
   const noteId = Array.isArray(rawNoteId)
     ? rawNoteId[0]
     : rawNoteId || "";
 
-  // 3. Auto-select latest note if none
+  // 3. If no noteId → auto-select or create note
   if (!noteId) {
-    const latestNote = await prisma.note.findFirst({
+    const latest = await prisma.note.findFirst({
       where: { authorId: user.id },
       orderBy: { createdAt: "desc" },
     });
 
-    let resolvedNoteId = latestNote?.id;
+    let resolved = latest?.id;
 
-    if (!resolvedNoteId) {
+    if (!resolved) {
       const newNote = await prisma.note.create({
         data: {
           id: uuidv4(),
@@ -45,20 +43,18 @@ export default async function Home({
           text: "",
         },
       });
-      resolvedNoteId = newNote.id;
+      resolved = newNote.id;
     }
 
-    redirect(`/?noteId=${resolvedNoteId}`);
+    redirect(`/?noteId=${resolved}`);
   }
 
-  // 4. Load note
+  // 4. Load the note
   const note = await prisma.note.findUnique({
     where: { id: noteId, authorId: user.id },
   });
 
-  if (!note) {
-    redirect("/");
-  }
+  if (!note) redirect("/");
 
   return (
     <div className="flex h-full flex-col items-center gap-4">
