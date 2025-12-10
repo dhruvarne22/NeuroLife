@@ -5,31 +5,30 @@ import CreateNewNote from "@/components/CreateNewNote";
 import InputNote from "@/components/InputNote";
 import { v4 as uuidv4 } from "uuid";
 
-type Props = {
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
-export default async function Home({ searchParams }: Props) {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
   // 1. Authenticate user
   const authUser = await getUser();
   if (!authUser) {
     redirect("/login");
   }
 
-  // Normalize user shape for components
   const user = {
     id: authUser.id,
     name: "NeuroLife User",
     email: authUser.email ?? "",
   };
 
-  // 2. Determine noteId from URL
-  const rawNoteId = searchParams.noteId;
+  // 2. Extract noteId safely
+  const rawNoteId = searchParams?.noteId;
   const noteId = Array.isArray(rawNoteId)
     ? rawNoteId[0]
     : rawNoteId || "";
 
-  // 3. If no noteId → autoselect or create note
+  // 3. Auto-select latest note if none
   if (!noteId) {
     const latestNote = await prisma.note.findFirst({
       where: { authorId: user.id },
@@ -38,7 +37,6 @@ export default async function Home({ searchParams }: Props) {
 
     let resolvedNoteId = latestNote?.id;
 
-    // If user has *no notes*, create a new one
     if (!resolvedNoteId) {
       const newNote = await prisma.note.create({
         data: {
@@ -50,24 +48,18 @@ export default async function Home({ searchParams }: Props) {
       resolvedNoteId = newNote.id;
     }
 
-    // Redirect to page with noteId in URL
     redirect(`/?noteId=${resolvedNoteId}`);
   }
 
-  // 4. Load the note content
+  // 4. Load note
   const note = await prisma.note.findUnique({
-    where: {
-      id: noteId,
-      authorId: user.id,
-    },
+    where: { id: noteId, authorId: user.id },
   });
 
-  // If somehow invalid noteId → redirect to newest
   if (!note) {
     redirect("/");
   }
 
-  // 5. Render UI
   return (
     <div className="flex h-full flex-col items-center gap-4">
       <div className="flex w-full max-w-4xl justify-end gap-2">
