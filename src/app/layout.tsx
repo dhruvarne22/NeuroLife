@@ -4,8 +4,9 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import AppSideBar from "@/components/MyAppSidebar";
 import Header from "@/components/Header";
 import { ThemeProvider } from "@/components/providers/themeProvider";
-import { Toaster } from "react-hot-toast";
+
 import NoteProvider from "@/components/providers/NoteProvider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: {default: "NeuroLife - AI Daily Journal", template : "%s | NeuroLife"} ,

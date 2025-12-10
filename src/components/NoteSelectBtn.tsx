@@ -6,6 +6,7 @@ import { SidebarMenuButton } from './ui/sidebar';
 import Link from 'next/link';
 import useNote from '@/hooks/use-note';
 import { useSearchParams } from 'next/navigation';
+import { format } from 'date-fns';
 
 type Props = {
     note : Note;
@@ -59,7 +60,7 @@ if(useGlobalNoteText){
     {noteText}
 </p>
 <p className='text-muted-foreground text-xs'>
-    {note.createdAt.toLocaleDateString()}
+    {format(new Date(note.createdAt), "dd/MM/yyyy")}
 </p>
 </Link>
 

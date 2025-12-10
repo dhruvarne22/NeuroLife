@@ -1,10 +1,10 @@
 import React, { startTransition, useTransition } from 'react'
 import { Button } from './ui/button'
 import { Loader2, Trash2 } from 'lucide-react'
-
 import { AlertDialogAction, AlertDialogCancel, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,  AlertDialog, AlertDialogContent, AlertDialogTrigger } from './ui/alert-dialog'
 import { deleteNoteAction } from '@/action/note'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { toast } from 'sonner'
 type Props= {
     noteId : string;
     localNoteDel : (noteId: string) => void;
@@ -26,7 +26,7 @@ startTransition(async ()=>{
     console.log(noteId);
     console.log(noteIdparam);
 if(!errorMessage){
-
+toast.success("Note Deleted Successfully", {description : "Note has been deleted succesfully"})
     localNoteDel(noteId);
 
     if(noteId === noteIdparam){

@@ -9,6 +9,7 @@ import { Note } from '@prisma/client'
 import Fuse from "fuse.js";
 import NoteSelectBtn from './NoteSelectBtn'
 import DeleteNoteBtn from './DeleteNoteBtn'
+import { groupofNotesByDay } from '@/action/grouped'
 
 
 type Props = {
@@ -37,7 +38,7 @@ const fuse = useMemo(() => {
 }, [localNotes])
 
 const filteredNotes = searchText ? fuse.search(searchText).map((result)=>result.item) : localNotes;
-
+const grouped = groupofNotesByDay(filteredNotes);
 const localDelNote = (noteId : string) => {
   setLocalnotes((prevNotes)=>prevNotes.filter((note) => note.id !== noteId));
 }
@@ -53,17 +54,21 @@ const localDelNote = (noteId : string) => {
     </div>
 
 
-<SidebarMenu className='mt-4'>
+<SidebarMenu className='mt-4 space-y-4'>
 
-
-
-    {filteredNotes.map((note)=> (
+{Object.keys(grouped).map((dataLabel)=> (
+  <div key={dataLabel}>
+    <p className='text-xs font-semibold text-muted-foreground'>{dataLabel}</p>
+    {grouped[dataLabel].map((note)=> (
   <SidebarMenuItem key={note.id} className='group/item'>
  <NoteSelectBtn note= {note} />
 <DeleteNoteBtn noteId={note.id} localNoteDel={localDelNote}/>
     </SidebarMenuItem>
     ))}
+  </div>
+))}
 
+ 
   
 
 

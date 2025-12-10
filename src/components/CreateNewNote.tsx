@@ -1,11 +1,12 @@
 "use client"
 import React, { useState } from 'react'
 import { Button } from './ui/button'
-import { User } from '@supabase/supabase-js';
+
 import { useRouter } from 'next/navigation';
 import {v4 as uuidv4} from "uuid";
 import { createNoteAction } from '@/action/note';
 import { Loader2 } from 'lucide-react';
+import { User } from '@prisma/client';
 
 type Props = {
     user : User | null;
@@ -23,7 +24,7 @@ router.push("/login")
         const uuid = uuidv4();
         console.log("I AM RUNNING FOR BOW");
         await createNoteAction(uuid);
-        router.push(`/?noteid=${uuid}`)
+        router.push(`/?noteId=${uuid}`)
         setloading(false);
     }
 }
