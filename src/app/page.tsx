@@ -12,7 +12,16 @@ export default async function Home({searchParams} : Props) {
 const noteIdparam = (await searchParams).noteId;
 const noteid = Array.isArray(noteIdparam) ? noteIdparam[0] : noteIdparam || "";
 
-const user = await getUser();
+const authUser = await getUser();
+
+const user = authUser
+  ? {
+      id: authUser.id,
+      name: authUser.name ?? null,  
+      email: authUser.email ?? "",
+    }
+  : null;
+
 const note = await prisma.note.findUnique({
   where : {id : noteid, authorId : user?.id}
 })
