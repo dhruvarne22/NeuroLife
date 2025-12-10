@@ -66,7 +66,7 @@ const handleSubmit = () => {
 <h1 className='text-2xl font-bold mb-2'>Ask NeuroAI about your notes</h1>
 <p className='text-muted-foreground mb-4'>Your personal AI assistant for your notebook.</p>
 
-<div className='cutom-scrollbar flex-1 overflow-y-auto rounded-lg border p-4 space-y-6' ref={contentRef}>
+<div className='  max-h-[60vh]  cutom-scrollbar flex-1 overflow-y-auto rounded-lg border p-4 space-y-6' ref={contentRef}>
 
 
     {questions.map((question, index)=> (

@@ -44,7 +44,7 @@ if(user){
             <Image src="https://e7.pngegg.com/pngimages/318/144/png-clipart-iron-man-avatar-iron-man-cartoon-avatar-superhero-icon-superhero-phone-icon-comics-face.png" alt='avatar' width={40} height={40} className='object-cover'/>
           </div>
           <div>
-            <p className='text-sm font-semibold'>{user.email}</p>
+            <p className='text-sm font-semibold'>{user ? user.email : "Please sign in"}</p>
           </div>
         </div>
       </SidebarFooter>

@@ -4,6 +4,7 @@ import { Button } from './ui/button';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { logOutAction } from '@/action/user';
+import { toast } from 'sonner';
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -14,9 +15,11 @@ const [loading, setLoading] = useState(false);
 
 
 const handleLogout= async () =>{
+  const id = toast.loading("Logging you out!", {description : "See you soon!"})
     setLoading(true);
    await logOutAction();
 setLoading(false);
+toast.dismiss(id);
     router.push("/login");
 }
 

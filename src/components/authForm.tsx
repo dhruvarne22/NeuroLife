@@ -9,6 +9,7 @@ import { signUpAction } from '@/action/user'
 
 import { loginAction } from '../action/user'
 import { showErrorToast, showSuccessToast } from '@/lib/toast-utils'
+import { toast } from 'sonner'
 
 
 type Props ={
@@ -41,22 +42,23 @@ if(isLoginForm){
 
 console.log("errorMessage23323424");
 console.log(errorMessage);
+toast.error("Error occured", {description : errorMessage});
 if(!errorMessage){
 
 
 if(isLoginForm){
+toast.success("Logged in successfully", {description : "Welcome back to Neurolife!"});
 
-  showSuccessToast("Logged in successfully");
 
 }else{
- showSuccessToast("Plesae confirm your email");
+  toast.info("Plesae confirm your email", {description : `Check your inbox ${email}`});
+
 
 }
-  console.log("Success SignUp");
   
 }else{
+toast.error("Error Occured", {description : errorMessage});
 
-  showErrorToast(errorMessage);
   console.log(errorMessage);
 }
 
