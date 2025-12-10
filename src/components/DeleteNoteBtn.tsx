@@ -1,4 +1,4 @@
-import React, { startTransition, useTransition } from 'react'
+import React, {useTransition } from 'react'
 import { Button } from './ui/button'
 import { Loader2, Trash2 } from 'lucide-react'
 import { AlertDialogAction, AlertDialogCancel, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,  AlertDialog, AlertDialogContent, AlertDialogTrigger } from './ui/alert-dialog'
@@ -23,8 +23,6 @@ startTransition(async ()=>{
      
     const {errorMessage} =     await deleteNoteAction(noteId);
 
-    console.log(noteId);
-    console.log(noteIdparam);
 if(!errorMessage){
 toast.success("Note Deleted Successfully", {description : "Note has been deleted succesfully"})
     localNoteDel(noteId);
@@ -33,7 +31,8 @@ toast.success("Note Deleted Successfully", {description : "Note has been deleted
 router.replace('/');
     }
 }else{
-    console.log(errorMessage);
+  toast.error("Error occured",{ description : errorMessage})
+
 }
 
 })

@@ -2,7 +2,7 @@ import { getUser } from "@/auth/server";
 import { prisma } from "@/db/prisma";
 import { handleError } from "@/lib/utils";
 import { OpenAI } from "openai";
-import { parse } from "path";
+
 
 type PersonaResult = {
     character: string;
@@ -146,8 +146,7 @@ ${payload}
             const raw = res.choices?.[0]?.message?.content ?? "";
             const parsed = safeJSONparse(raw);
 
-            if (!parsed) {
-                console.log("Personal JSON parsed failed", raw.slice(0, 180));
+            if (!parsed) {  console.log("Personal JSON parsed failed", raw.slice(0, 180));
                 const completedMatches = goalsText.match(/completed|done|finished|\b\d{1,2}[\/\-]\d{1,2}\b/gi) || [];
 
                 return {

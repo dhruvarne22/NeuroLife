@@ -6,9 +6,7 @@ import { CardContent, CardFooter } from './ui/card'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { signUpAction } from '@/action/user'
-
 import { loginAction } from '../action/user'
-import { showErrorToast, showSuccessToast } from '@/lib/toast-utils'
 import { toast } from 'sonner'
 
 
@@ -40,8 +38,6 @@ if(isLoginForm){
 
 }
 
-console.log("errorMessage23323424");
-console.log(errorMessage);
 toast.error("Error occured", {description : errorMessage});
 if(!errorMessage){
 
@@ -59,7 +55,7 @@ toast.success("Logged in successfully", {description : "Welcome back to Neurolif
 }else{
 toast.error("Error Occured", {description : errorMessage});
 
-  console.log(errorMessage);
+
 }
 
 

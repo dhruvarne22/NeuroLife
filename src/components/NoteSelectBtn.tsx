@@ -7,7 +7,7 @@ import Link from 'next/link';
 import useNote from '@/hooks/use-note';
 import { useSearchParams } from 'next/navigation';
 import { format } from 'date-fns';
-import { toast } from 'sonner';
+
 
 type Props = {
     note : Note;
@@ -23,8 +23,7 @@ const [localNoteText, setLocalNoteText] = useState(note.text);
 
 useEffect(() => {
 
-    console.log("setUseGlobalNoteText");
-    console.log(useGlobalNoteText);
+
   if(noteId === note.id){
   
   setUseGlobalNoteText(true);
@@ -33,8 +32,7 @@ useEffect(() => {
     setUseGlobalNoteText(false);
   }
 
-  console.log("setUseGlobalNoteText");
-    console.log(useGlobalNoteText);
+  ;
 }, [noteId, note.id])
 
 

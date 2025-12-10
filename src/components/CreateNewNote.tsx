@@ -1,7 +1,6 @@
 "use client"
 import React, { useState } from 'react'
 import { Button } from './ui/button'
-
 import { useRouter } from 'next/navigation';
 import {v4 as uuidv4} from "uuid";
 import { createNoteAction } from '@/action/note';
@@ -27,7 +26,7 @@ router.push("/login")
 
         setloading(true);
         const uuid = uuidv4();
-        console.log("I AM RUNNING FOR BOW");
+ 
         await createNoteAction(uuid);
         router.push(`/?noteId=${uuid}`)
         setloading(false);

@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useMemo, useState } from 'react'
-import { SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from './ui/sidebar'
+import { SidebarGroupContent, SidebarMenu, SidebarMenuItem } from './ui/sidebar'
 import { SearchIcon } from 'lucide-react'
 import { Input } from './ui/input'
 import { Note } from '@prisma/client'

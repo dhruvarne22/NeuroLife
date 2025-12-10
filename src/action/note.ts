@@ -3,7 +3,7 @@ import { getUser } from "@/auth/server";
 import { prisma } from "@/db/prisma";
 import { handleError } from "@/lib/utils";
 import { Note } from "@prisma/client";
-import {endOfDay, format, isToday, isYesterday, startOfDay} from "date-fns";
+import { format, isToday, isYesterday} from "date-fns";
 import {OpenAI} from "openai";
 export const updateNoteAction = async (noteId : string , text : string) => {
 try {
@@ -11,8 +11,7 @@ try {
     const user  = await getUser();
 
     if(!user) throw Error("Login to update Note");
-console.log("noteidDDD");
-console.log(noteId);
+
 
     await prisma.note.update({
         where : {id : noteId},
@@ -21,8 +20,7 @@ console.log(noteId);
 
     return {errorMessage : null}
 } catch (error) {
-    console.log("9error");
-    console.log(error);
+
     return handleError(error);
 }
 
@@ -54,7 +52,7 @@ try {
     return {errorMessage : null}
 } catch (error) {
 
-    console.log(error);
+
     return handleError(error);
 }
 
@@ -160,8 +158,6 @@ const res = await client.chat.completions.create({
 export async function summarisedNotesByDay(notes: Note[]) {
   const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-  console.log("🔄 Starting summarisedNotesByDay...");
-  console.log("📝 Total notes received:", notes.length);
 
   // 1. Group notes by date
   const grouped: Record<string, Note[]> = {};
@@ -178,13 +174,10 @@ export async function summarisedNotesByDay(notes: Note[]) {
     grouped[label].push(note);
   });
 
-  console.log("📅 Grouped by date:", Object.keys(grouped));
-
   // 2. Summarize each date group
   const result: Record<string, any> = {};
 
 for (const date of Object.keys(grouped)) {
-  console.log(`\n=== 📌 Processing date: ${date} ===`);
 
   const notesOfDay = grouped[date];
 
@@ -201,18 +194,14 @@ for (const date of Object.keys(grouped)) {
   return true;
 });
 
-  console.log("📊 Notes:", notesOfDay.length);
-  console.log("🔍 Cached summary exists:", cachedSummary ? "YES" : "NO");
-  console.log("🔄 Needs regeneration:", needsRegen ? "YES" : "NO");
 
   // If summary exists and nothing changed → reuse it
   if (cachedSummary && !needsRegen) {
-    console.log("⛔ Using cached summary");
+
     result[date] = { summary: cachedSummary, notes: notesOfDay };
     continue;
   }
 
-  console.log("⚡ Summary missing or outdated → generating new summary...");
 
   const combinedText = notesOfDay.map((n) => n.text).join("\n\n");
 
@@ -238,7 +227,7 @@ ${combinedText}`;
 
   const summary = res.choices[0].message.content || "";
 
-  console.log("✅ New summary generated");
+
 
   // Update all notes of the day
   await prisma.note.updateMany({
@@ -251,7 +240,6 @@ ${combinedText}`;
     },
   });
 
-  console.log("💾 Summary saved to DB");
 
   result[date] = {
     summary,
@@ -260,7 +248,6 @@ ${combinedText}`;
 }
 
 
-  console.log("\n🏁 Finished summarisedNotesByDay()");
   return result;
 }
 

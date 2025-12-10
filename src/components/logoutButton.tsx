@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { logOutAction } from '@/action/user';
 import { toast } from 'sonner';
 
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 function LogoutButton() {
 const router = useRouter();

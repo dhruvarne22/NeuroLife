@@ -2,7 +2,7 @@
 
 import { getUser } from "@/auth/server";
 import { prisma } from "@/db/prisma";
-import { handleError } from "@/lib/utils";
+
 
 
 export async function getUserGoals(){

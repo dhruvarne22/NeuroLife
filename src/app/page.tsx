@@ -11,8 +11,7 @@ type Props = {
 export default async function Home({searchParams} : Props) {
 const noteIdparam = (await searchParams).noteId;
 const noteid = Array.isArray(noteIdparam) ? noteIdparam[0] : noteIdparam || "";
-console.log("noteid home");
-console.log(noteid);
+
 const user = await getUser();
 const note = await prisma.note.findUnique({
   where : {id : noteid, authorId : user?.id}

@@ -1,6 +1,5 @@
 'use client'
 
-
 import { ChangeEvent, useEffect } from 'react'
 import { Textarea } from './ui/textarea'
 import useNote from '@/hooks/use-note'
@@ -19,15 +18,11 @@ const InputNote = ({noteId ,  startingNoteText} : Props) => {
 
 const noteIdParam = useSearchParams().get("noteId") || "";
     const {noteText , setNoteText} = useNote();
-console.log("HI THER");
+
     useEffect(() => {
-    console.log("HI THER2");
-    console.log("noteIdParam");
-    console.log(noteIdParam);
-        console.log("noteI");
-    console.log(noteId);
+
       if(noteIdParam === noteId){ 
-    console.log("HI THER3");
+
         setNoteText(startingNoteText);
       }
       
@@ -37,16 +32,16 @@ console.log("HI THER");
 
 const handleUpdateNote = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value;
-console.log(text);
+
  setNoteText(text);
-console.log("UPDATING NOTE FROM WITHOUT DEBOUNCE");   
+   
    clearTimeout(updateTimeout);
 
 
    updateTimeout = setTimeout( () => {
      //UPDATE NOTES IN BACKEDN
      updateNoteAction(noteId, text);
-console.log("UPDATING NOTE FROM DEBOUNCE");
+
    }, 1000)
 }
 
