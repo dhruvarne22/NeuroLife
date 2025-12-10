@@ -31,13 +31,13 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   if (error) {
-    
+    console.log("SUPABASE AUTH ERROR ->", error.message);
   }
 
   const pathname = request.nextUrl.pathname;
   const search = request.nextUrl.searchParams;
 
-  const PUBLIC_PATHS = ["/login", "/sign-up"];
+  const PUBLIC_PATHS = ["/login", "/sign-up" , "/sentry-example-page"];
   const isPublic = PUBLIC_PATHS.includes(pathname);
 
   // 1) If logged-in user visits login/signup → redirect home
