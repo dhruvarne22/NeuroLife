@@ -4,7 +4,6 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import AppSideBar from "@/components/MyAppSidebar";
 import Header from "@/components/Header";
 import { ThemeProvider } from "@/components/providers/themeProvider";
-
 import NoteProvider from "@/components/providers/NoteProvider";
 import { Toaster } from "sonner";
 
