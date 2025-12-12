@@ -1,99 +1,43 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUser } from "./auth/server";
-import { request } from "node:http";
-
-
 import { createServerClient } from "@supabase/ssr";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
 
-export async function middleware(request: NextRequest){
-const {searchParams , pathname} = new URL(request.url);
-const user = await getUser();
+  const PUBLIC_PATHS = ['/login', '/sign-up'];
+  const isPublicPath = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
 
-console.log(user);
-
-
-const PUBLIC_PATHS = ['/login', '/sign-up'];
-
-const isPublicPath = PUBLIC_PATHS.some((path)=> {
-    return pathname.startsWith(path);
-})
-
-let supabaseResponse = NextResponse.next({request});
+  let response = NextResponse.next();
 
   const supabase = createServerClient(
-    supabaseUrl!,
-    supabaseKey!,
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value),
-          );
-          supabaseResponse = NextResponse.next({
-            request,
+        getAll: () => request.cookies.getAll(),
+        setAll: (cookies) => {
+          cookies.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options);
           });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options),
-          );
         },
       },
-    },
+    }
   );
 
+  const { data: { user } } = await supabase.auth.getUser();
 
-const authRoute = request.nextUrl.pathname === "/login" || request.nextUrl.pathname === "/sign-up";
+  // Logged-in users should NOT see login / signup
+  if (user && isPublicPath) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 
-if(authRoute){
-    const {data : {user},} = await supabase.auth.getUser();
-    if(user){
-        return NextResponse.redirect(new URL("/", request.url));
-    }
+  // Not logged in → redirect to login
+  if (!user && !isPublicPath) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  return response;
 }
-
-
-
-
-if(!searchParams.get("noteId") && pathname === "/"){
-    const {data:{user}} = await supabase.auth.getUser();
-
-    if(user){
-
-
-        const {latestNoteId} = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/fetch-latest-note?userId=${user.id}`).then(res=>{
-   
-
-            return res.json();})    ;
-
-        if (latestNoteId){
-            const url = request.nextUrl.clone();
-            url.searchParams.set("noteId", latestNoteId);
-            return NextResponse.redirect(url);
-        }else {
-            const {noteId} = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/create-new-note?userId=${user.id}`,{
-method : 'POST',
-headers : {"Content-Type" : "application/json"}
-            } ).then(res=> res.json());
-
-            const url = request.nextUrl.clone();
-            url.searchParams.set("noteId", noteId); 
-            return NextResponse.redirect(url); 
-        }
-    }
-}
-
-if(!user && !isPublicPath){
-return NextResponse.redirect(new URL('/login', request.url));
-}
-    return supabaseResponse;
-}
-
-
 
 export const config ={
     matcher : [
