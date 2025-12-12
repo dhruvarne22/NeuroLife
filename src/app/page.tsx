@@ -13,7 +13,18 @@ const noteIdparam = (await searchParams).noteId;
 const noteid = Array.isArray(noteIdparam) ? noteIdparam[0] : noteIdparam || "";
 console.log("noteid home");
 console.log(noteid);
-const user = await getUser();
+
+  const rawUser = await getUser();
+
+  // ⭐ Normalize to the structure CreateNewNote expects
+  const user = rawUser
+    ? {
+        id: rawUser.id,
+        name: "NeuroLife User",
+        email: (rawUser as any).email ?? "",
+      }
+    : null;
+
 const note = await prisma.note.findUnique({
   where : {id : noteid, authorId : user?.id}
 })
