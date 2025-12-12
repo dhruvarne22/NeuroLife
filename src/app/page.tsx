@@ -19,7 +19,7 @@ export default async function Home(props: any) {
 
   const user = {
     id: rawUser.id,
-    name: rawUser.name ?? "NeuroLife User",
+    name: "NeuroLife User",
     email: (rawUser as any).email ?? "",
   };
 
