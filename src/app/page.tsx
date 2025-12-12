@@ -1,18 +1,18 @@
+export const dynamic = "force-dynamic";
+
+import { redirect } from "next/navigation";
+import { prisma } from "@/db/prisma";
 import { getUser } from "@/auth/server";
 import CreateNewNote from "@/components/CreateNewNote";
 import InputNote from "@/components/InputNote";
-import { prisma } from "@/db/prisma";
-import { redirect } from "next/navigation";
 
-export default async function Home(props: {
-  searchParams?: Record<string, string | string[] | undefined>;
-}) {
 
-  const searchParams = await props.searchParams; 
+export default async function Home(props: any) {
 
+  const searchParams = await Promise.resolve(props.searchParams ?? {});
+
+  // Auth
   const rawUser = await getUser();
-
-  // User not logged in (should not happen because middleware protects this)
   if (!rawUser) {
     redirect("/login");
   }
@@ -23,34 +23,29 @@ export default async function Home(props: {
     email: (rawUser as any).email ?? "",
   };
 
-  // Extract noteId from URL
-  const noteIdParam = searchParams.noteId;
+  // Extract noteId
+  const noteIdParam = searchParams?.noteId;
   const noteId = Array.isArray(noteIdParam) ? noteIdParam[0] : noteIdParam || "";
 
-  // ⚡ If no noteId in URL → determine what to do
+  // If no noteId, find latest or create new and redirect
   if (!noteId) {
-    // Fetch latest note
-    const latestNote = await prisma.note.findFirst({
+    const latest = await prisma.note.findFirst({
       where: { authorId: user.id },
       orderBy: { createdAt: "desc" },
     });
 
-    if (latestNote) {
-      redirect(`/?noteId=${latestNote.id}`);
+    if (latest) {
+      redirect(`/?noteId=${latest.id}`);
     }
 
-    // No note found → create one
     const newNote = await prisma.note.create({
-      data: {
-        authorId: user.id,
-        text: "",
-      },
+      data: { authorId: user.id, text: "" },
     });
 
     redirect(`/?noteId=${newNote.id}`);
   }
 
-  // Load the note from DB
+  // Load the note for rendering
   const note = await prisma.note.findUnique({
     where: { id: noteId, authorId: user.id },
   });
@@ -61,7 +56,7 @@ export default async function Home(props: {
         <CreateNewNote user={user} />
       </div>
 
-      <InputNote noteId={noteId} startingNoteText={note?.text || ""} />
+      <InputNote noteId={noteId} startingNoteText={note?.text ?? ""} />
     </div>
   );
 }
