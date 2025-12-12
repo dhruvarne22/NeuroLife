@@ -4,7 +4,11 @@ import InputNote from "@/components/InputNote";
 import { prisma } from "@/db/prisma";
 import { redirect } from "next/navigation";
 
-export default async function Home({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+export default async function Home(props: {
+  searchParams?: Record<string, string | string[] | undefined>;
+}) {
+
+  const searchParams = await props.searchParams; 
 
   const rawUser = await getUser();
 
